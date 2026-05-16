@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1778947652571" clover="3.2.0">
+  <project timestamp="1778947652571" name="All files">
+    <metrics statements="25" coveredstatements="25" conditionals="16" coveredconditionals="13" methods="3" coveredmethods="3" elements="44" coveredelements="41" complexity="0" loc="25" ncloc="25" packages="2" files="2" classes="2"/>
+    <package name="database">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="database.js" path="C:\Users\lucas\Documents\GitHub\barbearia-app\backend\src\database\database.js">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="18" coveredstatements="18" conditionals="16" coveredconditionals="13" methods="3" coveredmethods="3"/>
+      <file name="agendamentoService.js" path="C:\Users\lucas\Documents\GitHub\barbearia-app\backend\src\services\agendamentoService.js">
+        <metrics statements="18" coveredstatements="18" conditionals="16" coveredconditionals="13" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="6" count="6" type="cond" truecount="7" falsecount="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="15" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="48" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="52" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
