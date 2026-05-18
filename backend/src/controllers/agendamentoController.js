@@ -1,31 +1,31 @@
 const agendamentoService = require("../services/agendamentoService");
 
-function criarAgendamento(request, response) {
+async function criarAgendamento(request, response) {
   try {
-    const resultado = agendamentoService.criarAgendamento(request.body);
+    const resultado = await agendamentoService.criarAgendamento(request.body);
     response.status(201).json(resultado);
   } catch (erro) {
     response.status(400).json({ mensagem: erro.message });
-  };
-};
+  }
+}
 
-function listarAgendamentos(request, response) {
+async function listarAgendamentos(request, response) {
   try {
-    const agendamentos = agendamentoService.listarAgendamentos();
+    const agendamentos = await agendamentoService.listarAgendamentos();
     response.status(200).json(agendamentos);
   } catch (erro) {
-    response.status(500).json({ mensagem: erro.message});
-  };
-};
+    response.status(500).json({ mensagem: erro.message });
+  }
+}
 
-function cancelarAgendamentos(request, response) {
+async function cancelarAgendamento(request, response) {
   try {
     const { id } = request.params;
-    const resultado = agendamentoService.cancelarAgendamentos(id);
+    const resultado = await agendamentoService.cancelarAgendamento(id);
     response.status(200).json(resultado);
   } catch (erro) {
-    response.status(400).json({ mensagem: erro.message});
-  };
-};
+    response.status(400).json({ mensagem: erro.message });
+  }
+}
 
-module.exports = { criarAgendamento, listarAgendamentos, cancelarAgendamentos };
+module.exports = { criarAgendamento, listarAgendamentos, cancelarAgendamento };

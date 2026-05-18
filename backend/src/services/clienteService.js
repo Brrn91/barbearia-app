@@ -1,29 +1,32 @@
-const db = require('../database/database');
+const dbReal = require('../database/database');
 
-function criarCliente(dados) {
-  const {nome, telefone} = dados;
+async function criarCliente(dados, db = dbReal) {
+  const { nome, telefone } = dados;
 
-  if(!nome || !telefone) {
-    throw new Error('Nome e telefone são obrigatórios!');
+  if (!nome || !telefone) {
+    throw new Error('Nome e telefone são obrigatórios');
   }
 
-  const clienteExistente = db.prepare(`
-    SELECT id FROM clientes WHERE telefone = ?
-    `).get(telefone);
+  const clienteExistente = await db.query(
+    `SELECT id FROM clientes WHERE telefone = $1`,
+    [telefone]
+  );
 
-  if (clienteExistente) {
+  if (clienteExistente.rows.length > 0) {
     throw new Error('Já existe um cliente com esse telefone');
   }
 
-  const resultado = db.prepare(`
-    INSERT INTO clientes (nome, telefone) VALUES (?, ?)
-    `).run(nome, telefone);
+  const resultado = await db.query(
+    `INSERT INTO clientes (nome, telefone) VALUES ($1, $2) RETURNING id`,
+    [nome, telefone]
+  );
 
-  return {id: resultado.lastInsertRowid, mensagem: 'Cliente criado com sucesso!'};
-};
-
-function listarClientes() {
-  return db.prepare(`SELECT * FROM clientes`).all();
+  return { id: resultado.rows[0].id, mensagem: 'Cliente criado com sucesso!' };
 }
 
-module.exports = {criarCliente, listarClientes};
+async function listarClientes(db = dbReal) {
+  const resultado = await db.query(`SELECT * FROM clientes`);
+  return resultado.rows;
+}
+
+module.exports = { criarCliente, listarClientes };

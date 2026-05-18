@@ -1,11 +1,19 @@
-const db = require('./src/database/database');
+require("dotenv").config();
+const db = require("./src/database/database");
 
-db.prepare(`
-  INSERT INTO clientes (nome, telefone) VALUES (?, ?)
-  `).run('Lucas', '47 99999-0000');
+async function seed() {
+  await db.query(`INSERT INTO clientes (nome, telefone) VALUES ($1, $2)`, [
+    "Lucas",
+    "47 99999-0000",
+  ]);
 
-db.prepare(`
-  INSERT INTO barbeiros (nome, especialidade) VALUES (?, ?)
-  `).run('João', 'Corte e Barba');
+  await db.query(
+    `INSERT INTO barbeiros (nome, especialidade) VALUES ($1, $2)`,
+    ["João", "Corte e Barba"],
+  );
 
-console.log('Dados inseridos com sucesso!');
+  console.log("Dados inseridos com sucesso!");
+  await db.end();
+}
+
+seed().catch(console.error);

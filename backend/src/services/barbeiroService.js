@@ -1,29 +1,32 @@
-const db = require('../database/database');
+const dbReal = require('../database/database');
 
-function criarBarbeiro(dados) {
+async function criarBarbeiro(dados, db = dbReal) {
   const { nome, especialidade } = dados;
 
   if (!nome || !especialidade) {
     throw new Error('Nome e especialidade são obrigatórios!');
   }
 
-  const barbeiroExistente = db.prepare(`
-    SELECT id FROM barbeiros WHERE nome = ?
-  `).get(nome);
+  const barbeiroExistente = await db.query(
+    `SELECT id FROM barbeiros WHERE nome = $1`,
+    [nome]
+  );
 
-  if (barbeiroExistente) {
+  if (barbeiroExistente.rows.length > 0) {
     throw new Error('Já existe um barbeiro com esse nome');
   }
 
-  const resultado = db.prepare(`
-    INSERT INTO barbeiros (nome, especialidade) VALUES (?, ?)
-  `).run(nome, especialidade);
+  const resultado = await db.query(
+    `INSERT INTO barbeiros (nome, especialidade) VALUES ($1, $2) RETURNING id`,
+    [nome, especialidade]
+  );
 
-  return { id: resultado.lastInsertRowid, mensagem: 'Barbeiro criado com sucesso!' };
+  return { id: resultado.rows[0].id, mensagem: 'Barbeiro criado com sucesso!' };
 }
 
-function listarBarbeiros() {
-  return db.prepare(`SELECT * FROM barbeiros`).all();
+async function listarBarbeiros(db = dbReal) {
+  const resultado = await db.query(`SELECT * FROM barbeiros`);
+  return resultado.rows;
 }
 
 module.exports = { criarBarbeiro, listarBarbeiros };

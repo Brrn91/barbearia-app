@@ -20,6 +20,6 @@ router.get('/barbeiros', barbeiroController.listarBarbeiros);
 
 router.post('/agendamentos', agendamentoController.criarAgendamento);
 router.get('/agendamentos', agendamentoController.listarAgendamentos);
-router.patch('/agendamentos/:id/cancelar', agendamentoController.cancelarAgendamentos);
+router.patch('/agendamentos/:id/cancelar', agendamentoController.cancelarAgendamento);
 
 module.exports = router;
