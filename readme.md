@@ -4,7 +4,7 @@ Sistema de gerenciamento de agendamentos para barbearias.
 
 ## 🔗 Links
 
-- **Frontend:** https://barbearia-app.vercel.app
+- **Frontend:** https://barbearia-app-ecru.vercel.app/
 - **Backend:** https://barbearia-app-production-62bc.up.railway.app
 
 ## 🚀 Tecnologias
