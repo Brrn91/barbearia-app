@@ -1,25 +1,43 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const agendamentoController = require('../controllers/agendamentoController');
-const clienteController = require('../controllers/clienteController');
-const barbeiroController = require('../controllers/barbeiroController');
+const agendamentoController = require("../controllers/agendamentoController");
+const clienteController = require("../controllers/clienteController");
+const barbeiroController = require("../controllers/barbeiroController");
+const authController = require("../controllers/authController");
+const { autenticar, autenticarAdmin } = require("../authMiddleware");
 
-router.get('/health', (request, response) => {
-  response.json({
-    status: 'ok',
-    message: 'API da Barbearia funcionando!',
-  });
+router.get("/health", (request, response) => {
+  response.json({ status: "ok", message: "API da Barbearia funcionando!" });
 });
 
-router.post('/clientes', clienteController.criarCliente);
-router.get('/clientes', clienteController.listarClientes)
+// Rotas públicas
+router.post("/auth/cadastro", authController.cadastrarCliente);
+router.post("/auth/login", authController.login);
 
-router.post('/barbeiros', barbeiroController.criarBarbeiro);
-router.get('/barbeiros', barbeiroController.listarBarbeiros);
+// Rotas de clientes — apenas admin
+router.post("/clientes", autenticarAdmin, clienteController.criarCliente);
+router.get("/clientes", autenticarAdmin, clienteController.listarClientes);
 
-router.post('/agendamentos', agendamentoController.criarAgendamento);
-router.get('/agendamentos', agendamentoController.listarAgendamentos);
-router.patch('/agendamentos/:id/cancelar', agendamentoController.cancelarAgendamento);
+// Rotas de barbeiros — públicas para listar, admin para criar
+router.post("/barbeiros", autenticarAdmin, barbeiroController.criarBarbeiro);
+router.get("/barbeiros", barbeiroController.listarBarbeiros);
+
+// Rotas de agendamentos
+router.post(
+  "/agendamentos",
+  autenticar,
+  agendamentoController.criarAgendamento,
+);
+router.get(
+  "/agendamentos",
+  autenticarAdmin,
+  agendamentoController.listarAgendamentos,
+);
+router.patch(
+  "/agendamentos/:id/cancelar",
+  autenticar,
+  agendamentoController.cancelarAgendamento,
+);
 
 module.exports = router;
