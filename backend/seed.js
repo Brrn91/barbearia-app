@@ -1,18 +1,26 @@
-require("dotenv").config();
-const db = require("./src/database/database");
+require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const db = require('./src/database/database');
 
 async function seed() {
-  await db.query(`INSERT INTO clientes (nome, telefone) VALUES ($1, $2)`, [
-    "Lucas",
-    "47 99999-0000",
-  ]);
+  const senhaCriptografada = await bcrypt.hash('admin123', 10);
 
-  await db.query(
-    `INSERT INTO barbeiros (nome, especialidade) VALUES ($1, $2)`,
-    ["João", "Corte e Barba"],
+  const usuario = await db.query(
+    `INSERT INTO usuarios (email, senha, tipo) VALUES ($1, $2, 'admin') RETURNING id`,
+    ['joao@barbearia.com', senhaCriptografada]
   );
 
-  console.log("Dados inseridos com sucesso!");
+  const usuarioId = usuario.rows[0].id;
+
+  await db.query(
+    `INSERT INTO barbeiros (usuario_id, nome, especialidade) VALUES ($1, $2, $3)`,
+    [usuarioId, 'João', 'Corte e Barba']
+  );
+
+  console.log('Admin criado com sucesso!');
+  console.log('Email: joao@barbearia.com');
+  console.log('Senha: admin123');
+
   await db.end();
 }
 
