@@ -1,5 +1,5 @@
-require('dotenv').config();
-const db = require('./src/database/database');
+require("dotenv").config();
+const db = require("./src/database/database");
 
 async function reset() {
   await db.query(`
@@ -7,8 +7,9 @@ async function reset() {
     DROP TABLE IF EXISTS clientes;
     DROP TABLE IF EXISTS barbeiros;
     DROP TABLE IF EXISTS usuarios;
+    DROP TABLE IF EXISTS servicos;
   `);
-  console.log('Tabelas removidas com sucesso!');
+  console.log("Tabelas removidas com sucesso!");
   await db.end();
 }
 
