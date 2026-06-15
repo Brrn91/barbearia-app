@@ -6,3 +6,4 @@ database.sqlite-wal
 logs/
 .vscode/settings.json
 .vscode/extensions.json
+coverage/
