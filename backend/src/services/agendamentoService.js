@@ -1,8 +1,38 @@
 const dbReal = require('../database/database');
 const logger = require('../logger');
 
+function horaParaMinutos(hora) {
+  const [horas, minutos] = hora.split(':').map(Number);
+  return horas * 60 + minutos;
+}
+
+function horariosSobrepostos(inicioA, duracaoA, inicioB, duracaoB) {
+  const fimA = inicioA + duracaoA;
+  const fimB = inicioB + duracaoB;
+
+  return inicioA < fimB && inicioB < fimA;
+}
+
+async function obterClienteId(dados, db) {
+  if (dados.usuario?.tipo !== 'cliente') {
+    return dados.clienteId;
+  }
+
+  const cliente = await db.query(
+    `SELECT id FROM clientes WHERE usuario_id = $1`,
+    [dados.usuario.id],
+  );
+
+  if (cliente.rows.length === 0) {
+    throw new Error('Cliente não encontrado para o usuário logado');
+  }
+
+  return cliente.rows[0].id;
+}
+
 async function criarAgendamento(dados, db = dbReal) {
-  const { clienteId, barbeiroId, data, horario, servicoId } = dados;
+  const { barbeiroId, data, horario, servicoId } = dados;
+  const clienteId = await obterClienteId(dados, db);
 
   if (!clienteId || !barbeiroId || !data || !horario || !servicoId) {
     logger.warn('Tentativa de agendamento com campos faltando');
@@ -10,7 +40,7 @@ async function criarAgendamento(dados, db = dbReal) {
   }
 
   const servico = await db.query(
-    `SELECT id, ativo FROM servicos WHERE id = $1`,
+    `SELECT id, ativo, duracao_minutos FROM servicos WHERE id = $1`,
     [servicoId]
   );
 
@@ -18,14 +48,32 @@ async function criarAgendamento(dados, db = dbReal) {
     throw new Error('Serviço não encontrado ou inativo');
   }
 
-  const agendamentoExistente = await db.query(
-    `SELECT id FROM agendamentos WHERE barbeiro_id = $1 AND data = $2 AND horario = $3`,
-    [barbeiroId, data, horario]
+  const agendamentosDoDia = await db.query(
+    `SELECT
+       agendamentos.horario,
+       servicos.duracao_minutos
+     FROM agendamentos
+     JOIN servicos ON agendamentos.servico_id = servicos.id
+     WHERE agendamentos.barbeiro_id = $1
+     AND agendamentos.data = $2
+     AND agendamentos.status = 'confirmado'`,
+    [barbeiroId, data]
   );
 
-  if (agendamentoExistente.rows.length > 0) {
+  const inicioNovoAgendamento = horaParaMinutos(horario);
+  const duracaoNovoAgendamento = servico.rows[0].duracao_minutos;
+  const existeConflito = agendamentosDoDia.rows.some((agendamento) =>
+    horariosSobrepostos(
+      inicioNovoAgendamento,
+      duracaoNovoAgendamento,
+      horaParaMinutos(agendamento.horario),
+      agendamento.duracao_minutos,
+    ),
+  );
+
+  if (existeConflito) {
     logger.warn(`Tentativa de agendamento duplicado - barbeiro ${barbeiroId} às ${horario} em ${data}`);
-    throw new Error('Barbeiro já possui agendamento nesse horário');
+    throw new Error('Barbeiro já possui agendamento nesse período');
   }
 
   const resultado = await db.query(

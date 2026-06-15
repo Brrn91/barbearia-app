@@ -2,7 +2,10 @@ const agendamentoService = require("../services/agendamentoService");
 
 async function criarAgendamento(request, response) {
   try {
-    const resultado = await agendamentoService.criarAgendamento(request.body);
+    const resultado = await agendamentoService.criarAgendamento({
+      ...request.body,
+      usuario: request.usuario,
+    });
     response.status(201).json(resultado);
   } catch (erro) {
     response.status(400).json({ mensagem: erro.message });
