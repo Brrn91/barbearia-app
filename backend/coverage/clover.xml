@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1782068117863" clover="3.2.0">
-  <project timestamp="1782068117863" name="All files">
+<coverage generated="1782162586024" clover="3.2.0">
+  <project timestamp="1782162586024" name="All files">
     <metrics statements="158" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="33" coveredmethods="0" elements="251" coveredelements="0" complexity="0" loc="158" ncloc="158" packages="1" files="6" classes="6"/>
     <file name="agendamentoService.js" path="C:\Users\lucas\Documents\GitHub\barbearia-app\backend\src\services\agendamentoService.js">
       <metrics statements="50" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="17" coveredmethods="0"/>
