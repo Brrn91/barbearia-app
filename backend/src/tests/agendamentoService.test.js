@@ -1,5 +1,11 @@
 require("dotenv").config();
 
+jest.mock("../logger", () => ({
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+}));
+
 const { Pool } = require("pg");
 
 let db;

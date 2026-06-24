@@ -1,59 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1782162586024" clover="3.2.0">
-  <project timestamp="1782162586024" name="All files">
-    <metrics statements="158" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="33" coveredmethods="0" elements="251" coveredelements="0" complexity="0" loc="158" ncloc="158" packages="1" files="6" classes="6"/>
+<coverage generated="1782262499457" clover="3.2.0">
+  <project timestamp="1782262499457" name="All files">
+    <metrics statements="156" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="31" coveredmethods="0" elements="247" coveredelements="0" complexity="0" loc="156" ncloc="156" packages="1" files="6" classes="6"/>
     <file name="agendamentoService.js" path="C:\Users\lucas\Documents\GitHub\barbearia-app\backend\src\services\agendamentoService.js">
-      <metrics statements="50" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="48" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="15" coveredmethods="0"/>
       <line num="1" count="0" type="stmt"/>
       <line num="3" count="0" type="stmt"/>
-      <line num="4" count="0" type="stmt"/>
-      <line num="10" count="0" type="stmt"/>
-      <line num="16" count="0" type="stmt"/>
-      <line num="24" count="0" type="stmt"/>
+      <line num="9" count="0" type="stmt"/>
+      <line num="17" count="0" type="stmt"/>
+      <line num="18" count="0" type="stmt"/>
       <line num="25" count="0" type="stmt"/>
-      <line num="32" count="0" type="stmt"/>
-      <line num="35" count="0" type="stmt"/>
+      <line num="28" count="0" type="stmt"/>
+      <line num="29" count="0" type="stmt"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="33" count="0" type="stmt"/>
+      <line num="34" count="0" type="stmt"/>
       <line num="36" count="0" type="stmt"/>
-      <line num="37" count="0" type="stmt"/>
       <line num="40" count="0" type="stmt"/>
-      <line num="41" count="0" type="stmt"/>
-      <line num="43" count="0" type="stmt"/>
-      <line num="47" count="0" type="stmt"/>
-      <line num="49" count="0" type="stmt"/>
-      <line num="53" count="0" type="stmt"/>
+      <line num="42" count="0" type="stmt"/>
+      <line num="46" count="0" type="stmt"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="52" count="0" type="stmt"/>
       <line num="55" count="0" type="stmt"/>
+      <line num="56" count="0" type="stmt"/>
       <line num="59" count="0" type="stmt"/>
-      <line num="62" count="0" type="stmt"/>
-      <line num="63" count="0" type="stmt"/>
-      <line num="66" count="0" type="stmt"/>
-      <line num="67" count="0" type="stmt"/>
-      <line num="68" count="0" type="stmt"/>
-      <line num="79" count="0" type="stmt"/>
-      <line num="80" count="0" type="stmt"/>
+      <line num="60" count="0" type="stmt"/>
+      <line num="61" count="0" type="stmt"/>
+      <line num="72" count="0" type="stmt"/>
+      <line num="73" count="0" type="stmt"/>
+      <line num="76" count="0" type="stmt"/>
+      <line num="77" count="0" type="stmt"/>
+      <line num="82" count="0" type="stmt"/>
       <line num="83" count="0" type="stmt"/>
-      <line num="84" count="0" type="stmt"/>
-      <line num="89" count="0" type="stmt"/>
-      <line num="90" count="0" type="stmt"/>
-      <line num="104" count="0" type="stmt"/>
-      <line num="105" count="0" type="stmt"/>
-      <line num="116" count="0" type="stmt"/>
-      <line num="131" count="0" type="stmt"/>
-      <line num="132" count="0" type="stmt"/>
-      <line num="133" count="0" type="stmt"/>
+      <line num="97" count="0" type="stmt"/>
+      <line num="98" count="0" type="stmt"/>
+      <line num="109" count="0" type="stmt"/>
+      <line num="124" count="0" type="stmt"/>
+      <line num="125" count="0" type="stmt"/>
+      <line num="126" count="0" type="stmt"/>
+      <line num="137" count="0" type="stmt"/>
+      <line num="138" count="0" type="stmt"/>
+      <line num="139" count="0" type="stmt"/>
+      <line num="143" count="0" type="stmt"/>
       <line num="144" count="0" type="stmt"/>
       <line num="145" count="0" type="stmt"/>
-      <line num="146" count="0" type="stmt"/>
-      <line num="150" count="0" type="stmt"/>
-      <line num="151" count="0" type="stmt"/>
-      <line num="152" count="0" type="stmt"/>
-      <line num="163" count="0" type="stmt"/>
-      <line num="164" count="0" type="stmt"/>
+      <line num="156" count="0" type="stmt"/>
+      <line num="157" count="0" type="stmt"/>
+      <line num="160" count="0" type="stmt"/>
+      <line num="161" count="0" type="stmt"/>
+      <line num="166" count="0" type="stmt"/>
       <line num="167" count="0" type="stmt"/>
-      <line num="168" count="0" type="stmt"/>
-      <line num="173" count="0" type="stmt"/>
-      <line num="174" count="0" type="stmt"/>
-      <line num="185" count="0" type="stmt"/>
-      <line num="187" count="0" type="stmt"/>
+      <line num="178" count="0" type="stmt"/>
+      <line num="180" count="0" type="stmt"/>
     </file>
     <file name="authService.js" path="C:\Users\lucas\Documents\GitHub\barbearia-app\backend\src\services\authService.js">
       <metrics statements="28" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="2" coveredmethods="0"/>
