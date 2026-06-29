@@ -45,7 +45,8 @@
                 <a href="#inicio" class="flex items-center gap-2 group">
                     <span
                         class="flex items-center justify-center w-9 h-9 rounded-lg bg-brand/10 text-brand font-bold text-lg">✂</span>
-                    <span class="font-semibold text-lg tracking-tight group-hover:text-brand transition-colors">barbearia-app</span>
+                    <span
+                        class="font-semibold text-lg tracking-tight group-hover:text-brand transition-colors">barbearia-app</span>
                 </a>
 
                 <nav class="hidden lg:flex items-center gap-8" aria-label="Navegação principal">
@@ -61,7 +62,8 @@
                     class="lg:hidden p-2 rounded-lg border border-white/10 hover:border-brand/30 transition-colors"
                     aria-label="Abrir menu" aria-expanded="false">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
@@ -82,11 +84,15 @@
             </button>
         </div>
         <nav class="flex flex-col gap-4">
-            <a href="#inicio" class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Início</a>
+            <a href="#inicio"
+                class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Início</a>
             <a href="#sobre" class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Sobre</a>
-            <a href="#servicos" class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Serviços</a>
-            <a href="#depoimentos" class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Depoimentos</a>
-            <a href="#localizacao" class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Localização</a>
+            <a href="#servicos"
+                class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Serviços</a>
+            <a href="#depoimentos"
+                class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Depoimentos</a>
+            <a href="#localizacao"
+                class="mobile-nav-link py-2 text-neutral-300 hover:text-brand transition-colors">Localização</a>
             <a href="#agendar" class="btn-primary mt-4 text-center">Agendar agora</a>
         </nav>
     </aside>
@@ -399,7 +405,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>Seg–Sex 9h–19h · Sáb 9h–17h</span>
+                                <span>Seg–Sex 9h–19h · Sáb 9h–13h</span>
                             </p>
                             <p class="flex items-start gap-3">
                                 <svg class="w-5 h-5 text-brand shrink-0 mt-0.5" fill="none" stroke="currentColor"
@@ -421,8 +427,9 @@
                     </div>
                     <div class="map-container fade-in rounded-2xl overflow-hidden border border-white/10 h-72 lg:h-96">
                         <iframe title="Mapa da barbearia-app"
-                            src="https://www.openstreetmap.org/export/embed.html?bbox=-46.636%2C-23.548%2C-46.626%2C-23.543&layer=mapnik&marker=-23.5455%2C-46.631"
-                            width="100%" height="100%" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=-48.84622871875764%2C-26.304170730940797%2C-48.84371817111969%2C-26.302631855144007&amp;layer=mapnik"
+                            width="100%" height="100%" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
@@ -433,7 +440,8 @@
             <div class="container mx-auto px-4 lg:px-8">
                 <div class="cta-banner rounded-3xl p-8 lg:p-12 text-center mb-12 fade-in">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">Pronto para renovar o visual?</h2>
-                    <p class="text-neutral-400 mb-8 max-w-xl mx-auto">Agende agora pelo WhatsApp ou preencha o formulário
+                    <p class="text-neutral-400 mb-8 max-w-xl mx-auto">Agende agora pelo WhatsApp ou preencha o
+                        formulário
                         abaixo. Resposta rápida garantida.</p>
                     <button type="button" id="ctaWhatsapp" class="btn-primary text-lg px-8 py-4">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -457,7 +465,7 @@
                             <div>
                                 <label for="telefone" class="block text-sm text-neutral-400 mb-1.5">Telefone</label>
                                 <input type="tel" id="telefone" name="telefone" class="form-input"
-                                    placeholder="(11) 99999-9999" required>
+                                    placeholder="(47) 99999-9999" required>
                                 <p class="error-message hidden" data-error="telefone"></p>
                             </div>
                         </div>
@@ -470,12 +478,11 @@
                                 </select>
                                 <p class="error-message hidden" data-error="barbeiroId"></p>
                             </div>
-                            <div>
-                                <label for="servicoId" class="block text-sm text-neutral-400 mb-1.5">Serviço</label>
-                                <select id="servicoId" name="servicoId" class="form-input" required>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 mb-1">Serviço</label>
+                                <select id="servicoId" class="w-full bg-gray-700 text-white rounded px-3 py-2">
                                     <option value="">Selecione um serviço</option>
                                 </select>
-                                <p class="error-message hidden" data-error="servicoId"></p>
                             </div>
                         </div>
 

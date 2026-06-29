@@ -6,3 +6,6 @@ database.sqlite-wal
 logs/
 .vscode/settings.json
 .vscode/extensions.json
+backend/coverage/
+backend/diagnostico.js
+backend/babel.config.js
