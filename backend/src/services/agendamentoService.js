@@ -1,184 +1,96 @@
-require("dotenv").config();
+const dbReal = require("../database/database");
+const logger = require("../logger");
 
-const { Pool } = require("pg");
+async function criarAgendamento(dados, db = dbReal) {
+  const { clienteId, barbeiroId, data, horario, servicoId } = dados;
 
-const {
-  criarAgendamento,
-  listarAgendamentos,
-  cancelarAgendamento,
-} = require("../services/agendamentoService");
+  if (!clienteId || !barbeiroId || !data || !horario || !servicoId) {
+    logger.warn("Tentativa de agendamento com campos faltando");
+    throw new Error("Todos os campos são obrigatórios");
+  }
 
-let pool;
-let client;
-let clienteId;
-let barbeiroId;
-let servicoId;
-
-beforeAll(async () => {
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl:
-      process.env.NODE_ENV === "production"
-        ? { rejectUnauthorized: false }
-        : false,
-  });
-  client = await pool.connect();
-});
-
-afterAll(async () => {
-  client.release();
-  await pool.end();
-});
-
-beforeEach(async () => {
-  await client.query("BEGIN");
-
-  const cliente = await client.query(
-    `INSERT INTO clientes (nome, telefone) VALUES ($1, $2) RETURNING id`,
-    ["Cliente Teste", "47 90000-0000"],
+  const servico = await db.query(
+    `SELECT id, ativo FROM servicos WHERE id = $1`,
+    [servicoId],
   );
-  clienteId = cliente.rows[0].id;
 
-  const barbeiro = await client.query(
-    `INSERT INTO barbeiros (nome, especialidade) VALUES ($1, $2) RETURNING id`,
-    ["Barbeiro Teste", "Corte e Barba"],
+  if (servico.rows.length === 0 || !servico.rows[0].ativo) {
+    throw new Error("Serviço não encontrado ou inativo");
+  }
+
+  const agendamentoExistente = await db.query(
+    `SELECT id FROM agendamentos WHERE barbeiro_id = $1 AND data = $2 AND horario = $3`,
+    [barbeiroId, data, horario],
   );
-  barbeiroId = barbeiro.rows[0].id;
 
-  const servico = await client.query(
-    `INSERT INTO servicos (nome, preco, duracao_minutos) VALUES ($1, $2, $3) RETURNING id`,
-    ["Serviço Teste", 30.0, 30],
+  if (agendamentoExistente.rows.length > 0) {
+    logger.warn(
+      `Tentativa de agendamento duplicado - barbeiro ${barbeiroId} às ${horario} em ${data}`,
+    );
+    throw new Error("Barbeiro já possui agendamento nesse horário");
+  }
+
+  const resultado = await db.query(
+    `INSERT INTO agendamentos (cliente_id, barbeiro_id, data, horario, status, servico_id)
+     VALUES ($1, $2, $3, $4, 'confirmado', $5) RETURNING id`,
+    [clienteId, barbeiroId, data, horario, servicoId],
   );
-  servicoId = servico.rows[0].id;
-});
 
-afterEach(async () => {
-  await client.query("ROLLBACK");
-});
+  const id = resultado.rows[0].id;
+  logger.info(
+    `Agendamento criado - id: ${id}, barbeiro: ${barbeiroId}, data: ${data} às ${horario}`,
+  );
 
-describe("criarAgendamento", () => {
-  test("deve criar um agendamento com dados válidos", async () => {
-    const resultado = await criarAgendamento(
-      {
-        clienteId,
-        barbeiroId,
-        data: "2026-06-01",
-        horario: "10:00",
-        servicoId,
-      },
-      client,
-    );
+  return { id, mensagem: "Agendamento criado com sucesso!" };
+}
 
-    expect(resultado.mensagem).toBe("Agendamento criado com sucesso!");
-    expect(resultado.id).toBeDefined();
-  });
+async function listarAgendamentos(db = dbReal) {
+  const resultado = await db.query(`
+    SELECT
+      agendamentos.id,
+      agendamentos.data,
+      agendamentos.horario,
+      agendamentos.status,
+      clientes.nome AS "nomeCliente",
+      barbeiros.nome AS "nomeBarbeiro",
+      servicos.nome AS "nomeServico",
+      servicos.preco AS "precoServico"
+    FROM agendamentos
+    JOIN clientes ON agendamentos.cliente_id = clientes.id
+    JOIN barbeiros ON agendamentos.barbeiro_id = barbeiros.id
+    JOIN servicos ON agendamentos.servico_id = servicos.id
+  `);
 
-  test("deve lançar erro se campos obrigatórios estiverem faltando", async () => {
-    await expect(
-      criarAgendamento({ clienteId, barbeiroId, data: "2026-06-01" }, client),
-    ).rejects.toThrow("Todos os campos são obrigatórios");
-  });
+  logger.info(
+    `Listagem de agendamentos - ${resultado.rows.length} registro(s) retornado(s)`,
+  );
 
-  test("deve lançar erro se o serviço não existir ou estiver inativo", async () => {
-    await expect(
-      criarAgendamento(
-        {
-          clienteId,
-          barbeiroId,
-          data: "2026-06-01",
-          horario: "09:00",
-          servicoId: 999999,
-        },
-        client,
-      ),
-    ).rejects.toThrow("Serviço não encontrado ou inativo");
-  });
+  return resultado.rows;
+}
 
-  test("deve lançar erro se barbeiro já tiver agendamento no horário", async () => {
-    await criarAgendamento(
-      {
-        clienteId,
-        barbeiroId,
-        data: "2026-06-01",
-        horario: "11:00",
-        servicoId,
-      },
-      client,
-    );
+async function cancelarAgendamento(id, db = dbReal) {
+  const agendamento = await db.query(
+    `SELECT id, status FROM agendamentos WHERE id = $1`,
+    [id],
+  );
 
-    await expect(
-      criarAgendamento(
-        {
-          clienteId,
-          barbeiroId,
-          data: "2026-06-01",
-          horario: "11:00",
-          servicoId,
-        },
-        client,
-      ),
-    ).rejects.toThrow("Barbeiro já possui agendamento nesse horário");
-  });
-});
+  if (agendamento.rows.length === 0) {
+    logger.warn(`Tentativa de cancelar agendamento inexistente - id: ${id}`);
+    throw new Error("Agendamento não encontrado");
+  }
 
-describe("listarAgendamentos", () => {
-  test("deve retornar uma lista de agendamentos", async () => {
-    await criarAgendamento(
-      {
-        clienteId,
-        barbeiroId,
-        data: "2026-06-01",
-        horario: "12:00",
-        servicoId,
-      },
-      client,
-    );
+  if (agendamento.rows[0].status === "cancelado") {
+    logger.warn(`Tentativa de cancelar agendamento já cancelado - id: ${id}`);
+    throw new Error("Agendamento já está cancelado");
+  }
 
-    const agendamentos = await listarAgendamentos(client);
-    expect(Array.isArray(agendamentos)).toBe(true);
-    expect(agendamentos.length).toBeGreaterThan(0);
-  });
-});
+  await db.query(`UPDATE agendamentos SET status = 'cancelado' WHERE id = $1`, [
+    id,
+  ]);
 
-describe("cancelarAgendamento", () => {
-  test("deve cancelar um agendamento existente", async () => {
-    const agendamento = await criarAgendamento(
-      {
-        clienteId,
-        barbeiroId,
-        data: "2026-06-02",
-        horario: "14:00",
-        servicoId,
-      },
-      client,
-    );
+  logger.info(`Agendamento cancelado - id: ${id}`);
 
-    const resultado = await cancelarAgendamento(agendamento.id, client);
-    expect(resultado.mensagem).toBe("Agendamento cancelado com sucesso!");
-  });
+  return { mensagem: "Agendamento cancelado com sucesso!" };
+}
 
-  test("deve lançar erro se agendamento não existir", async () => {
-    await expect(cancelarAgendamento(9999999, client)).rejects.toThrow(
-      "Agendamento não encontrado",
-    );
-  });
-
-  test("deve lançar erro se agendamento já estiver cancelado", async () => {
-    const agendamento = await criarAgendamento(
-      {
-        clienteId,
-        barbeiroId,
-        data: "2026-06-03",
-        horario: "15:00",
-        servicoId,
-      },
-      client,
-    );
-
-    await cancelarAgendamento(agendamento.id, client);
-
-    await expect(cancelarAgendamento(agendamento.id, client)).rejects.toThrow(
-      "Agendamento já está cancelado",
-    );
-  });
-});
+module.exports = { criarAgendamento, listarAgendamentos, cancelarAgendamento };
