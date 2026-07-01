@@ -4,8 +4,9 @@ database.sqlite
 database.sqlite-shm
 database.sqlite-wal
 logs/
-.vscode/settings.json
-.vscode/extensions.json
 backend/coverage/
 backend/diagnostico.js
 backend/babel.config.js
+.idea/
+.vscode/settings.json
+.vscode/extensions.json
