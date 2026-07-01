@@ -29,3 +29,21 @@ export interface Servico {
   duracao_minutos: number;
   ativo: boolean;
 }
+
+export interface DadosCadastroCliente {
+  nome: string;
+  telefone: string;
+  email: string;
+  senha: string;
+}
+
+export interface DadosLogin {
+  email: string;
+  senha: string;
+}
+
+export interface ResultadoLogin {
+  token: string;
+  tipo: string;
+  mensagem: string;
+}
