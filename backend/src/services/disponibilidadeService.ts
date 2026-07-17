@@ -10,8 +10,8 @@ function horaParaMinutos(hora: string): number {
   return horas * 60 + minutos;
 }
 
-function minutosParaHoras(minutos:number): number {
+function minutosParaHoras(minutos:number): string {
   const horas = Math.floor(minutos / 60);
   const mins = minutos % 60;
-  return `${Number(horas).padStart(2, '0')}:${Number(mins).padStart(2, '0')}`;
+  return `${String(horas).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
 }
