@@ -47,3 +47,8 @@ export interface ResultadoLogin {
   tipo: string;
   mensagem: string;
 }
+
+export interface HorarioDisponivel {
+  horario: string;
+  disponivel: boolean;
+}
