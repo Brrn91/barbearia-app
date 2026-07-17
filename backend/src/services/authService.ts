@@ -1,10 +1,27 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const dbReal = require("../database/database");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { Pool, PoolClient } from "pg";
+import {
+  DadosCadastroCliente,
+  DadosLogin,
+  ResultadoLogin,
+  ResultadoOperacao,
+} from "../types";
+
+const dbReal: Pool = require("../database/database");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-async function cadastrarCliente(dados, db = dbReal) {
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET não definido nas variáveis de ambiente");
+}
+
+const secret: string = JWT_SECRET;
+
+async function cadastrarCliente(
+  dados: DadosCadastroCliente,
+  db: Pool | PoolClient = dbReal,
+): Promise<ResultadoOperacao> {
   const { nome, telefone, email, senha } = dados;
 
   if (!nome || !telefone || !email || !senha) {
@@ -27,7 +44,7 @@ async function cadastrarCliente(dados, db = dbReal) {
     [email, senhaCriptografada],
   );
 
-  const usuarioId = usuario.rows[0].id;
+  const usuarioId: number = usuario.rows[0].id;
 
   const cliente = await db.query(
     `INSERT INTO clientes (usuario_id, nome, telefone) VALUES ($1, $2, $3) RETURNING id`,
@@ -40,7 +57,10 @@ async function cadastrarCliente(dados, db = dbReal) {
   };
 }
 
-async function login(dados, db = dbReal) {
+async function login(
+  dados: DadosLogin,
+  db: Pool | PoolClient = dbReal,
+): Promise<ResultadoLogin> {
   const { email, senha } = dados;
 
   if (!email || !senha) {
@@ -63,7 +83,7 @@ async function login(dados, db = dbReal) {
     throw new Error("Email ou senha inválidos");
   }
 
-  const token = jwt.sign({ id: usuario.id, tipo: usuario.tipo }, JWT_SECRET, {
+  const token = jwt.sign({ id: usuario.id, tipo: usuario.tipo }, secret, {
     expiresIn: "7d",
   });
 
@@ -74,4 +94,4 @@ async function login(dados, db = dbReal) {
   };
 }
 
-module.exports = { cadastrarCliente, login };
+export { cadastrarCliente, login };

@@ -1,7 +1,17 @@
-const dbReal = require("../database/database");
-const logger = require("../logger");
+import { Pool, PoolClient } from "pg";
+import {
+  DadosCriarAgendamento,
+  ResultadoOperacao,
+  Agendamento,
+} from "../types";
+import { logger } from "../logger";
 
-async function criarAgendamento(dados, db = dbReal) {
+const dbReal: Pool = require("../database/database");
+
+async function criarAgendamento(
+  dados: DadosCriarAgendamento,
+  db: Pool | PoolClient = dbReal,
+): Promise<ResultadoOperacao> {
   const { clienteId, barbeiroId, data, horario, servicoId } = dados;
 
   if (!clienteId || !barbeiroId || !data || !horario || !servicoId) {
@@ -36,7 +46,7 @@ async function criarAgendamento(dados, db = dbReal) {
     [clienteId, barbeiroId, data, horario, servicoId],
   );
 
-  const id = resultado.rows[0].id;
+  const id: number = resultado.rows[0].id;
   logger.info(
     `Agendamento criado - id: ${id}, barbeiro: ${barbeiroId}, data: ${data} às ${horario}`,
   );
@@ -44,7 +54,9 @@ async function criarAgendamento(dados, db = dbReal) {
   return { id, mensagem: "Agendamento criado com sucesso!" };
 }
 
-async function listarAgendamentos(db = dbReal) {
+async function listarAgendamentos(
+  db: Pool | PoolClient = dbReal,
+): Promise<Agendamento[]> {
   const resultado = await db.query(`
     SELECT
       agendamentos.id,
@@ -65,10 +77,13 @@ async function listarAgendamentos(db = dbReal) {
     `Listagem de agendamentos - ${resultado.rows.length} registro(s) retornado(s)`,
   );
 
-  return resultado.rows;
+  return resultado.rows as Agendamento[];
 }
 
-async function cancelarAgendamento(id, db = dbReal) {
+async function cancelarAgendamento(
+  id: number,
+  db: Pool | PoolClient = dbReal,
+): Promise<ResultadoOperacao> {
   const agendamento = await db.query(
     `SELECT id, status FROM agendamentos WHERE id = $1`,
     [id],
@@ -93,4 +108,4 @@ async function cancelarAgendamento(id, db = dbReal) {
   return { mensagem: "Agendamento cancelado com sucesso!" };
 }
 
-module.exports = { criarAgendamento, listarAgendamentos, cancelarAgendamento };
+export { criarAgendamento, listarAgendamentos, cancelarAgendamento };
