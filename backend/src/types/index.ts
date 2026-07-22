@@ -59,3 +59,10 @@ export interface DadosCriarBarbeiro {
   email: string;
   senha: string;
 }
+
+export interface Barbeiro {
+  id: number;
+  usuario_id: number;
+  nome: string;
+  especialidade: string;
+}
