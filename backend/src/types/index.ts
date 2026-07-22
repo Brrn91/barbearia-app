@@ -52,3 +52,10 @@ export interface HorarioDisponivel {
   horario: string;
   disponivel: boolean;
 }
+
+export interface DadosCriarBarbeiro {
+  nome: string;
+  especialidade: string;
+  email: string;
+  senha: string;
+}
